@@ -27,3 +27,22 @@ The project demonstrates:
 ### 1. Build the JAR
 ```bash
 mvn clean package
+
+
+2. Build Docker Image
+
+docker build -t mpasquale3/todo-app .
+
+3. Load image into Minikube
+
+minikube start
+minikube image load "mpasquale3/todo-app:latest"
+
+4. Apply Kubernetes Resources
+
+kubectl apply -f todo-deployment.yaml
+kubectl apply -f todo-service.yaml
+
+5. Access the App
+
+minikube service todo-service
