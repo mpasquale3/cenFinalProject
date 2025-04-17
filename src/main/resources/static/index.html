@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do App</title>
+</head>
+<body>
+<h1>To-Do App</h1>
+<form id="taskForm">
+    <input type="text" id="desc" placeholder="Task description" required>
+    <button type="submit">Add Task</button>
+</form>
+<ul id="taskList"></ul>
+
+<script>
+    async function loadTasks() {
+        const res = await fetch('/tasks');
+        const tasks = await res.json();
+        const list = document.getElementById('taskList');
+        list.innerHTML = '';
+        tasks.forEach(t => {
+            const li = document.createElement('li');
+            li.textContent = t.description;
+            list.appendChild(li);
+        });
+    }
+
+    document.getElementById('taskForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const desc = document.getElementById('desc').value;
+        await fetch('/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ description: desc })
+        });
+        document.getElementById('desc').value = '';
+        loadTasks();
+    });
+
+    loadTasks();
+</script>
+
+<style>
+    body {
+        background-color: #e8e3dc; /* Sky clay */
+        font-family: 'Segoe UI', sans-serif;
+        padding: 40px;
+        color: #40342d; /* Cool brown */
+    }
+
+    h1 {
+        color: #4b3f36; /* Deep soil */
+        margin-bottom: 20px;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        padding: 30px;
+        max-width: 500px;
+        margin: 0 auto;
+        border: 1px solid #d6cec2;
+    }
+
+    form {
+        margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+        padding: 10px;
+        width: 250px;
+        border: 2px solid #7c6a5c; /* River rock */
+        border-radius: 6px;
+        background-color: #fefefe;
+        color: #40342d;
+        font-size: 14px;
+    }
+
+    button {
+        padding: 10px 18px;
+        background-color: #a3b18a; /* Sage green */
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-left: 10px;
+        transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+        background-color: #7c6a5c; /* River rock */
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        padding: 8px 12px;
+        background-color: #f4f1ec;
+        border-left: 5px solid #a3b18a; /* Sage highlight */
+        border-radius: 4px;
+        margin-bottom: 5px;
+        color: #4b3f36;
+    }
+
+
+</style>
+</body>
+</html>
